@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { IFAQ } from "../../../interfaces";
 import { getSP } from "../../../pnpjsConfig";
 import { Accordion } from "@pnp/spfx-controls-react/lib/Accordion";
+import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
+import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 // import { escape } from "@microsoft/sp-lodash-subset";
 
 const Faq = (props: IFaqProps) => {
@@ -36,20 +38,33 @@ const Faq = (props: IFaqProps) => {
   };
 
   useEffect(() => {
-    if(props.listGuid && props.listGuid !== '') {
+    if (props.listGuid && props.listGuid !== "") {
       getFAQItems();
     }
   }, [props]);
 
   return (
     <>
-      {faqItems.map((o: IFAQ, index: number) => {
-        return (
-          <Accordion key={index} title={o.Title} defaultCollapsed={true}>
-            {o.Body}
-          </Accordion>
-        );
-      })}
+    <WebPartTitle displayMode={props.displayMode}
+              title={props.title}
+              updateProperty={props.updateProperty} />
+      {props.listGuid ? (
+        faqItems.map((o: IFAQ, index: number) => {
+          return (
+            <Accordion key={index} title={o.Title} defaultCollapsed={true}>
+              {o.Body}
+            </Accordion>
+          );
+        })
+      ) : (
+        <Placeholder
+          iconName="Edit"
+          iconText="Configure your web part"
+          description="Please configure the web part."
+          buttonLabel="Configure"
+          onConfigure={() => props.context.propertyPane.open()}
+        />
+      )}
     </>
   );
 };

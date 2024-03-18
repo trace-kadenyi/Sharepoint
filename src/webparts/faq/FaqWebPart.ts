@@ -19,6 +19,7 @@ import {
 export interface IFaqWebPartProps {
   description: string;
   list: string;
+  title: string;
 }
 
 export default class FaqWebPart extends BaseClientSideWebPart<IFaqWebPartProps> {
@@ -44,6 +45,11 @@ export default class FaqWebPart extends BaseClientSideWebPart<IFaqWebPartProps> 
       userDisplayName: this.context.pageContext.user.displayName,
       context: this.context,
       listGuid: this.properties.list,
+      title: this.properties.title,
+      displayMode: this.displayMode,
+      updateProperty: (value: string) => {
+        this.properties.title = value;
+      },
     });
 
     ReactDom.render(element, this.domElement);
